@@ -81,7 +81,7 @@ const products = [
     name: "Women Round Neck Cotton Top",
     description: "A lightweight, usually knitted, pullover shirt",
     price: 100,
-    image: [women],          // ✅ array
+    image: [women,women1],          // ✅ array
     category: "Women",
     subCategory: "Topwear",
     sizes: ["S", "M", "L"],
@@ -92,7 +92,7 @@ const products = [
     name: "Men Round Neck Pure Cotton T-shirt",
     description: "Comfortable cotton t-shirt for daily wear",
     price: 200,
-    image: [women1], // ✅ multiple images
+    image: [women,women1], // ✅ multiple images
     category: "Men",
     subCategory: "Topwear",
     sizes: ["M", "L", "XL"],
@@ -103,7 +103,7 @@ const products = [
     name: "Women Round Neck Cotton Top",
     description: "A lightweight, usually knitted, pullover shirt",
     price: 100,
-    image: [women],          // ✅ array
+    image: [women,women1],          // ✅ array
     category: "Women",
     subCategory: "Topwear",
     sizes: ["S", "M", "L"],
@@ -114,7 +114,7 @@ const products = [
     name: "Men Round Neck Pure Cotton T-shirt",
     description: "Comfortable cotton t-shirt for daily wear",
     price: 200,
-    image: [women1], // ✅ multiple images
+    image: [women,women1], // ✅ multiple images
     category: "Men",
     subCategory: "Topwear",
     sizes: ["M", "L", "XL"],
@@ -125,7 +125,7 @@ const products = [
     name: "Women Round Neck Cotton Top",
     description: "A lightweight, usually knitted, pullover shirt",
     price: 100,
-    image: [women],          // ✅ array
+    image: [women,women1],          // ✅ array
     category: "Women",
     subCategory: "Topwear",
     sizes: ["S", "M", "L"],
@@ -136,7 +136,7 @@ const products = [
     name: "Men Round Neck Pure Cotton T-shirt",
     description: "Comfortable cotton t-shirt for daily wear",
     price: 200,
-    image: [women1], // ✅ multiple images
+    image: [women1, women], // ✅ multiple images
     category: "Men",
     subCategory: "Topwear",
     sizes: ["M", "L", "XL"],
@@ -147,7 +147,7 @@ const products = [
     name: "Women Round Neck Cotton Top",
     description: "A lightweight, usually knitted, pullover shirt",
     price: 100,
-    image: [women],          // ✅ array
+    image: [women,women1],          // ✅ array
     category: "Women",
     subCategory: "Topwear",
     sizes: ["S", "M", "L"],
@@ -158,7 +158,7 @@ const products = [
     name: "Men Round Neck Pure Cotton T-shirt",
     description: "Comfortable cotton t-shirt for daily wear",
     price: 200,
-    image: [women1], // ✅ multiple images
+    image: [women,women1], // ✅ multiple images
     category: "Men",
     subCategory: "Topwear",
     sizes: ["M", "L", "XL"],
@@ -169,7 +169,7 @@ const products = [
     name: "Women Round Neck Cotton Top",
     description: "A lightweight, usually knitted, pullover shirt",
     price: 100,
-    image: [women],          // ✅ array
+    image: [women,women1],          // ✅ array
     category: "Women",
     subCategory: "Topwear",
     sizes: ["S", "M", "L"],
@@ -178,9 +178,9 @@ const products = [
   {
     id: "aaaab",
     name: "Men Round Neck Pure Cotton T-shirt",
-    description: "Comfortable cotton t-shirt for daily wear",
+    description: "Comfortable cotton t-shirt for daily wear hhd hvsa gffqg gdggd uyye rvvd tyyeh vfss2 hht ttdged uyvvduw hyuvdtydv iuydfkb bbuvwc hjwuv lorem yyrhf bh we",
     price: 200,
-    image: [women1], // ✅ multiple images
+    image: [women,women1,women, women1], // ✅ multiple images
     category: "Men",
     subCategory: "Topwear",
     sizes: ["M", "L", "XL"],

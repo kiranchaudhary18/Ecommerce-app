@@ -11,6 +11,13 @@ import policy2 from './policy2.png';
 import arrow from './arrow.png';
 import SearchBar from './searchbar.png';
 import cross from  './cross.png'
+import star from './star.png';
+import stardull from './star_dull.png';
+import delet from './delete.png';
+import stripe from './stripe.png';
+import razorpay from './razorpay.png';
+import about from './about.png'
+import contact from './contact.png'
 
 const assets = {
   logo,
@@ -25,7 +32,15 @@ const assets = {
   policy2,
   arrow,
   SearchBar,
-  cross
+  cross,
+  star,
+  stardull,
+  delet,
+  stripe,
+  razorpay,
+  about,
+  contact
+  
   
 };
 
