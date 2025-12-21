@@ -6,6 +6,7 @@ import OurPolicy from '../components/OurPolicy';
 import NewsletterBox from '../components/NewsletterBox';
 
 
+
 const Home = () => {
     return (
         <div>
@@ -14,6 +15,7 @@ const Home = () => {
             <BestSeller/>
             <OurPolicy/>
             <NewsletterBox/>
+           
         </div>
     );
 }
