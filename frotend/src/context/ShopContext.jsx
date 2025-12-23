@@ -144,19 +144,30 @@ const ShopContextProvider = (props) => {
 
      }
 
-     const getUserCart = async ( token ) => {
-     try{
-       const response = await axios.post(backendUrl + '/api/cart/get', {}, {headers : {token}})
-       if(response.data.success) {
-        setCartItems(response.data.cartData)
-       }
+     const getUserCart = async () => {
+  try {
+    const userToken = token || localStorage.getItem("token");
 
-     }catch(error) {
-         console.log(error)
-         toast.error(error.message)
+    if (!userToken) return; // user logged out
 
-     }
-     } 
+    const response = await axios.post(
+      backendUrl + "/api/cart/get",
+      {},
+      {
+        headers: {
+          token: userToken
+        }
+      }
+    );
+
+    if (response.data.success) {
+      setCartItems(response.data.cartData);
+    }
+  } catch (error) {
+    console.log(error);
+    toast.error("Failed to load cart");
+  }
+};
 
     useEffect (()=>{
         getProductsData()
