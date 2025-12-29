@@ -23,6 +23,7 @@ import logo1 from './logo1.png'
 import add from './add.png'
 import order from './order.png'
 import upload from './upload.png'
+import parcel from './parcel.png'
 
 const assets = {
   logo,
@@ -48,7 +49,8 @@ const assets = {
   logo1,
   add,
   order,
-  upload
+  upload,
+  parcel
   
   
 };
