@@ -1,40 +1,85 @@
+import orderModel from '../models/orderModel.js'
+import userModel from '../models/userModel.js'
 
-
-
-// placing orders using COD Method 
-
+// ================= PLACE ORDER (COD) =================
 const placeOrder = async (req, res) => {
+  try {
+    const { items, amount, address } = req.body;
+    const userId = req.userId;   // 🔥 FROM JWT
 
-}
+    if (!userId) {
+      return res.json({
+        success: false,
+        message: "User ID missing from token"
+      });
+    }
 
-// placing orders using Stripe Method 
+    const orderData = {
+      userId,
+      items,
+      address,
+      amount,
+      paymentMethod: "COD",
+      payment: false,
+      date: Date.now()
+    };
 
-const placeOrderStripe = async (req, res) => {
+    const newOrder = new orderModel(orderData);
+    await newOrder.save();
+
+    // clear cart
+    await userModel.findByIdAndUpdate(userId, { cartData: {} });
+
+    res.json({ success: true, message: "Order Placed" });
+
+  } catch (error) {
+    console.log(error);
+    res.json({ success: false, message: error.message });
+  }
+};
+
+
+// ================= USER ORDERS =================
+const userOrders = async (req, res) => {
+   try{
+      
+    const {userId} = req.body
+    const orders = await orderModel.find({userId})
+
+    res.json({success:true, orders})
     
+   }catch(error) {
+       console.log(error)
+      res.json({success:false, message:error.message})
+   }
 }
 
-// placing orders using Razorpay Method 
-
-const placeOrderRazorpay = async (req, res) => {
+// ================= ADMIN: ALL ORDERS =================
+const allOrders = async (req, res) => {
     
+   try{
+       const orders = await orderModel.find({})
+       res.json({success:false, orders})
+   }
+   catch(error){
+     console.log(error)
+      res.json({success:false, message:error.message})
+   }
 }
 
-// All orders data for Admin Panel 
-
-const allOrders = async (req, res) =>{
-
+// ================= UPDATE STATUS =================
+const updateStatus = async (req, res) => {
+  
 }
 
-// user order Data for Frontend
+const placeOrderStripe = async () => {}
+const placeOrderRazorpay = async () => {}
 
-const userorders = async (req, res) =>{
-    
+export {
+  placeOrder,
+  placeOrderRazorpay,
+  placeOrderStripe,
+  allOrders,
+  userOrders,
+  updateStatus
 }
-
-// update order status from Admin Panel
-
-const updateStatus = async (req, res) =>{
-    
-}
-
-export {placeOrder, placeOrderRazorpay, placeOrderStripe, allOrders, userorders, updateStatus}
