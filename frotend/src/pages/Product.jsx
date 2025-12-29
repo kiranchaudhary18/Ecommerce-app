@@ -43,9 +43,16 @@ const Product = () => {
                               }
                            </div>
 
-                            <div className='w-full sm:w-[80%]'>
-                               <img className='w-full h-auto' src={image} alt=""/>
-                         </div> 
+                          <div className="w-full sm:w-[80%]">
+  <div className="w-full h-[600px] bg-gray-100 rounded-md overflow-hidden flex items-center justify-center">
+    <img
+      src={image}
+      alt=""
+      className="w-full h-full object-contain"
+    />
+  </div>
+</div>
+
                     </div>
 
                     {/* ------ Product info ------ */}
