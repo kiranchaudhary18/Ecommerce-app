@@ -21,7 +21,7 @@ const ShopContextProvider = (props) => {
     return savedCart ? JSON.parse(savedCart) : {};
   });
 
- const [token, setToken] = useState(localStorage.getItem("userToken"));
+ const [token, setToken] = useState(localStorage.getItem("token"));
 
 
   const navigate = useNavigate();
@@ -172,6 +172,15 @@ const ShopContextProvider = (props) => {
   useEffect(() => {
     localStorage.setItem('cartItems', JSON.stringify(cartItems));
   }, [cartItems]);
+
+  // Sync token with localStorage
+  useEffect(() => {
+    if (token) {
+      localStorage.setItem('token', token);
+    } else {
+      localStorage.removeItem('token');
+    }
+  }, [token]);
 
   // ===================== CONTEXT VALUE =====================
   const value = {

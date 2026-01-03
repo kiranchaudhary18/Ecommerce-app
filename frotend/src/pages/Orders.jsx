@@ -14,7 +14,7 @@ const Orders = () => {
     if (!token) return;
 
     const response = await axios.post(
-      backendUrl + "/api/order/place",
+      backendUrl + "/api/order/userorders",
       {},
       {
         headers: {

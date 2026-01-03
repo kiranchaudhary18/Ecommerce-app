@@ -39,7 +39,7 @@ const ProductItem = ({ id, image, name, price }) => {
 
   return (
     <Link
-      to={`./product/${id}`}
+      to={`/product/${id}`}
       className="text-gray-700 cursor-pointer"
     >
 

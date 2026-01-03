@@ -70,11 +70,11 @@ const PlaceOrder = () => {
     };
 
     const response = await axios.post(
-      backendUrl + '/api/order/userorders',
+      backendUrl + '/api/order/place',
       orderData,
       {
         headers: {
-          Authorization: `Bearer ${token}`, // 🔥 FIX
+          Authorization: `Bearer ${token}`,
           "Content-Type": "application/json"
         }
       }
