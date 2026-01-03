@@ -62,3 +62,47 @@ const authUser = async (req, res, next) => {
 };
 
 export default authUser;
+
+
+
+
+
+
+
+// const loadOrderData = async () => {
+//   try {
+//     if (!token) return;
+
+//     const response = await axios.post(
+//       backendUrl + "/api/order/userorders",
+//       {},
+//       {
+//         headers: {
+//           Authorization: `Bearer ${token}`, // ✅ MATCH authUser
+//         },
+//       }
+//     );
+
+//     console.log("ORDERS RESPONSE:", response.data);
+
+//     if (response.data.success) {
+//       let allOrdersItem = [];
+
+//       response.data.orders.forEach((order) => {
+//         order.items.forEach((item) => {
+//           allOrdersItem.push({
+//             ...item,
+//             status: order.status,
+//             payment: order.payment,
+//             paymentMethod: order.paymentMethod,
+//             date: order.date,
+//           });
+//         });
+//       });
+
+//       setorderData(allOrdersItem.reverse());
+//     }
+//   } catch (error) {
+//     console.log("ORDER LOAD ERROR:", error);
+//   }
+// };
