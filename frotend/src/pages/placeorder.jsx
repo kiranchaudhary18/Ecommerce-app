@@ -47,15 +47,12 @@ const PlaceOrder = () => {
     for (const items in cartItems) {
       for (const item in cartItems[items]) {
         if (cartItems[items][item] > 0) {
-          const itemInfo = structuredClone(
-            products.find(product => product._id === items)
+          const product = structuredClone(
+            products.find(p => p._id === items)
           );
-
-          if (itemInfo) {
-            itemInfo.size = item;
-            itemInfo.quantity = cartItems[items][item];
-            orderItems.push(itemInfo);
-          }
+          product.size = item;
+          product.quantity = cartItems[items][item];
+          orderItems.push(product);
         }
       }
     }
@@ -64,32 +61,51 @@ const PlaceOrder = () => {
       address: formData,
       items: orderItems,
       amount: getCartAmount() + delivery_fee,
-      paymentMethod: "COD",
-      payment: false,
-      date: Date.now()
     };
 
-    const response = await axios.post(
-      backendUrl + '/api/order/place',
-      orderData,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json"
+    // 🔥 STRIPE PAYMENT
+    if (method === "stripe") {
+      const response = await axios.post(
+        backendUrl + "/api/order/stripe",
+        orderData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
-      }
-    );
+      );
 
-    if (response.data.success) {
-      setCartItems({});
-      navigate('/orders');
-    } else {
-      toast.error(response.data.message);
+      console.log('Stripe Response:', response.data);
+
+      if (response.data.success) {
+        window.location.href = response.data.session_url;
+      } else {
+        toast.error(response.data.message || 'Stripe payment failed');
+      }
+    }
+
+    // 🔥 COD PAYMENT
+    if (method === "cod") {
+      const response = await axios.post(
+        backendUrl + "/api/order/place",
+        orderData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.data.success) {
+        setCartItems({});
+        navigate("/orders");
+      } else {
+        toast.error(response.data.message || 'Order placement failed');
+      }
     }
 
   } catch (error) {
-    console.log(error.response?.data || error.message);
-    toast.error(error.response?.data?.message || error.message);
+    toast.error(error.message);
   }
 };
 
