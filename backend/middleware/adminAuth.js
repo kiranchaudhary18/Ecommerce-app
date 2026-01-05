@@ -12,15 +12,11 @@ const adminAuth = async (req,res,next) =>{
             return res.json({success:false, message:"Not Authorized Login Again"})
         }
         
-        const token_decode = jwt.verify(token,process.env.JWT_SECRET);
-        console.log("🔓 Token decoded:", token_decode);
+        const decoded = jwt.verify(token,process.env.JWT_SECRET);
+        console.log("🔓 Token decoded:", decoded);
         
-        const expectedValue = process.env.ADMIN_EMAIL + process.env.ADMIN_PASSWORD;
-        console.log("✅ Expected:", expectedValue);
-        console.log("🔍 Match:", token_decode === expectedValue);
-
-        if(token_decode !== expectedValue){
-         console.log("❌ Token mismatch");
+        if(decoded?.email !== process.env.ADMIN_EMAIL){
+         console.log("❌ Token email mismatch");
          return res.json({success:false, message:"Not Authorized Login Again"})
         }
         
