@@ -103,7 +103,7 @@ import Stripe from 'stripe'
 
 // global variables
 const currency="inr"
-const deliveryCharge=10
+const deliveryCharge=50  // ✅ Increased to meet Stripe minimum requirement
 
 // gatway initialize
 
@@ -156,7 +156,16 @@ const stripe=new Stripe(process.env.STRIPE_SECRET_KEY)
 const placeOrder = async (req, res) => {
   try {
     const { items, amount, address } = req.body;
-    const userId = req.userId;  // ✅ Keep as string to match orderModel
+    const userId = req.userId;  // ✅ From auth middleware
+    
+    console.log("PLACE ORDER CALLED:", { userId, itemsCount: items?.length, amount });
+
+    if (!userId) {
+      return res.json({
+        success: false,
+        message: "User ID missing. Please login again."
+      });
+    }
 
     const orderData = {
       userId,
@@ -169,14 +178,18 @@ const placeOrder = async (req, res) => {
       date: Date.now(),
     };
 
+    console.log("ORDER DATA TO SAVE:", orderData);
+
     const newOrder = new orderModel(orderData);
     await newOrder.save();
+
+    console.log("ORDER SAVED:", newOrder._id);
 
     await userModel.findByIdAndUpdate(new mongoose.Types.ObjectId(userId), { cartData: {} });
 
     res.json({ success: true, message: "Order placed successfully" });
   } catch (error) {
-    console.log(error);
+    console.log("PLACE ORDER ERROR:", error);
     res.json({ success: false, message: error.message });
   }
 };
@@ -220,14 +233,19 @@ const userOrders = async (req, res) => {
 /* ================= ADMIN: ALL ORDERS ================= */
 const allOrders = async (req, res) => {
   try {
+    console.log("🔵 ALL ORDERS API CALLED");
+    
     const orders = await orderModel.find({}).sort({ date: -1 });
+    
+    console.log("📦 TOTAL ORDERS FOUND:", orders.length);
+    console.log("📋 ORDERS:", JSON.stringify(orders, null, 2));
 
     res.json({
       success: true,
       orders,
     });
   } catch (error) {
-    console.log(error);
+    console.log("❌ ALL ORDERS ERROR:", error);
     res.json({ success: false, message: error.message });
   }
 };
@@ -270,20 +288,30 @@ const placeOrderStripe = async (req,res) => {
 
     console.log('Stripe Payment Request:', { userId, itemsCount: items.length, amount });
 
+    if (!userId) {
+      return res.json({
+        success: false,
+        message: "User ID missing. Please login again."
+      });
+    }
 
-     const orderData = {
+    const orderData = {
       userId,
       items,
       address,
       amount,
       paymentMethod: "Stripe",
       payment: false,
-      // status: "Order Placed",
+      status: "Order Placed",
       date: Date.now(),
     };
 
-     const newOrder = new orderModel(orderData);
+    console.log("STRIPE ORDER DATA:", orderData);
+
+    const newOrder = new orderModel(orderData);
     await newOrder.save()
+
+    console.log("STRIPE ORDER SAVED:", newOrder._id);
 
     const line_items=items.map((item)=>({
       price_data: {
@@ -330,6 +358,25 @@ const placeOrderStripe = async (req,res) => {
 
 const placeOrderRazorpay = async () => {};
 
+// verify stripe
+const verifyStripe = async (req, res) => {
+  const { orderId, success } = req.body;
+
+  try {
+    if (success === 'true') {
+      await orderModel.findByIdAndUpdate(orderId, { payment: true });
+      await userModel.findByIdAndUpdate(req.userId, { cartData: {} });
+      res.json({ success: true });
+    } else {
+      await orderModel.findByIdAndDelete(orderId);
+      res.json({ success: false });
+    }
+  } catch (error) {
+    console.log(error);
+    res.json({ success: false, message: error.message });
+  }
+};
+
 export {
   placeOrder,
   placeOrderRazorpay,
@@ -337,5 +384,6 @@ export {
   allOrders,
   userOrders,
   updateStatus,
+  verifyStripe,
 };
 
