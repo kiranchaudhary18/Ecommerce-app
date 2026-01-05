@@ -96,15 +96,19 @@ const PlaceOrder = () => {
         }
       );
 
+      console.log('COD Response:', response.data);
+
       if (response.data.success) {
         setCartItems({});
         navigate("/orders");
+        toast.success("Order placed successfully!");
       } else {
         toast.error(response.data.message || 'Order placement failed');
       }
     }
 
   } catch (error) {
+    console.log('Order error:', error);
     toast.error(error.message);
   }
 };
