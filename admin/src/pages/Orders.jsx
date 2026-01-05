@@ -8,7 +8,14 @@ const Orders = ({ token }) => {
   const [orders, setOrders] = useState([]);
 
   const fetchAllOrders = async () => {
-    if (!token) return;
+    if (!token) {
+      console.log("❌ NO TOKEN FOUND");
+      return;
+    }
+
+    console.log("🔵 Fetching orders...");
+    console.log("🔑 Token:", token);
+    console.log("🌐 Backend URL:", backendUrl);
 
     try {
       const response = await axios.post(
@@ -17,19 +24,27 @@ const Orders = ({ token }) => {
         { headers: { token } }
       );
 
-      console.log("ORDERS RESPONSE:", response.data);
+      console.log("✅ FULL RESPONSE:", response);
+      console.log("📦 RESPONSE DATA:", response.data);
+      console.log("📋 ORDERS ARRAY:", response.data.orders);
+      console.log("🔢 ORDERS COUNT:", response.data.orders?.length);
 
-      // ✅ FIX: success check hata diya
-      if (response.data.orders && response.data.orders.length > 0) {
-        const reversedOrders = response.data.orders.slice().reverse();
-        setOrders(reversedOrders);
+      if (response.data.success && response.data.orders) {
+        console.log("✅ Setting orders:", response.data.orders.length);
+        setOrders(response.data.orders);
+      } else if (response.data.orders) {
+        console.log("⚠️ Success false but orders exist");
+        setOrders(response.data.orders);
       } else {
+        console.log("❌ No orders in response");
         setOrders([]);
+        toast.info("No orders found");
       }
 
     } catch (error) {
-      console.error(error);
-      toast.error("Failed to fetch orders");
+      console.error("❌ ERROR:", error);
+      console.error("❌ ERROR RESPONSE:", error.response?.data);
+      toast.error(error.response?.data?.message || "Failed to fetch orders");
     }
   };
 
