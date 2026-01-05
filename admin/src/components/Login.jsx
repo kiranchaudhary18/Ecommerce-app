@@ -3,6 +3,8 @@ import axios from 'axios'
 import { toast } from 'react-toastify'
 import { backendUrl } from '../App'
 
+const ADMIN_TOKEN_KEY = 'adminToken'
+
 const Login = ({setToken}) =>{
 
     const [email, setEmail] = useState('')
@@ -11,14 +13,14 @@ const Login = ({setToken}) =>{
     const onSubmithandler = async (e) =>{
         try{
             e.preventDefault();
-            const response = await axios.post(backendUrl + '/api/user/admin',{email,password})
-            if (response.data.success) {
-  setToken(response.data.token);          // ✅ state update
-  localStorage.setItem("token", response.data.token); // ✅ optional
-  toast.success("Login successful");
-} else {
-  toast.error(response.data.message);
-}
+                        const response = await axios.post(backendUrl + '/api/user/admin',{email,password})
+                        if (response.data.success) {
+                            setToken(response.data.token);          // ✅ state update
+                            localStorage.setItem(ADMIN_TOKEN_KEY, response.data.token);
+                            toast.success("Login successful");
+                        } else {
+                            toast.error(response.data.message);
+                        }
 
 
         }catch(error){

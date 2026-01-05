@@ -11,14 +11,19 @@ import 'react-toastify/dist/ReactToastify.css'
 
 export const backendUrl = import.meta.env.VITE_BACKEND_URL
 export const currency = '$'
+const ADMIN_TOKEN_KEY = 'adminToken'
 
 const App = () => {
 
-  const [token, setToken] = useState(localStorage.getItem('token') ? localStorage.getItem('token'): '' ); 
+  const [token, setToken] = useState(localStorage.getItem(ADMIN_TOKEN_KEY) || ''); 
 
 
    useEffect(() => {
-    localStorage.setItem('token',token)
+    if (token) {
+      localStorage.setItem(ADMIN_TOKEN_KEY, token)
+    } else {
+      localStorage.removeItem(ADMIN_TOKEN_KEY)
+    }
    },[token])
 
   return (

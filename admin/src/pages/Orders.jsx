@@ -13,10 +13,6 @@ const Orders = ({ token }) => {
       return;
     }
 
-    console.log("🔵 Fetching orders...");
-    console.log("🔑 Token:", token);
-    console.log("🌐 Backend URL:", backendUrl);
-
     try {
       const response = await axios.post(
         backendUrl + "/api/order/list",
@@ -24,26 +20,16 @@ const Orders = ({ token }) => {
         { headers: { token } }
       );
 
-      console.log("✅ FULL RESPONSE:", response);
-      console.log("📦 RESPONSE DATA:", response.data);
-      console.log("📋 ORDERS ARRAY:", response.data.orders);
-      console.log("🔢 ORDERS COUNT:", response.data.orders?.length);
-
       if (response.data.success && response.data.orders) {
-        console.log("✅ Setting orders:", response.data.orders.length);
         setOrders(response.data.orders);
       } else if (response.data.orders) {
-        console.log("⚠️ Success false but orders exist");
         setOrders(response.data.orders);
       } else {
-        console.log("❌ No orders in response");
         setOrders([]);
         toast.info("No orders found");
       }
 
     } catch (error) {
-      console.error("❌ ERROR:", error);
-      console.error("❌ ERROR RESPONSE:", error.response?.data);
       toast.error(error.response?.data?.message || "Failed to fetch orders");
     }
   };
