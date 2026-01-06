@@ -284,9 +284,24 @@ const placeOrderStripe = async (req,res) => {
   try {
     const { items, amount, address } = req.body;
     const userId = req.userId; // ✅ Get from auth middleware
-    const { origin } = req.headers;
 
-    console.log('Stripe Payment Request:', { userId, itemsCount: items.length, amount });
+    if (!process.env.STRIPE_SECRET_KEY) {
+      return res.json({ success: false, message: "Stripe key missing on server" });
+    }
+
+    const originHeader = req.headers.origin;
+    const refererHeader = req.headers.referer;
+    const refererOrigin = (() => {
+      try {
+        return refererHeader ? new URL(refererHeader).origin : undefined;
+      } catch (e) {
+        return undefined;
+      }
+    })();
+
+    const frontendUrl = process.env.FRONTEND_URL || originHeader || refererOrigin || "http://localhost:5173";
+
+    console.log('Stripe Payment Request:', { userId, itemsCount: items.length, amount, originHeader, refererHeader, refererOrigin, frontendUrl });
 
     if (!userId) {
       return res.json({
@@ -309,47 +324,44 @@ const placeOrderStripe = async (req,res) => {
     console.log("STRIPE ORDER DATA:", orderData);
 
     const newOrder = new orderModel(orderData);
-    await newOrder.save()
+    await newOrder.save();
 
     console.log("STRIPE ORDER SAVED:", newOrder._id);
 
-    const line_items=items.map((item)=>({
+    const line_items = items.map((item) => ({
       price_data: {
-        currency: currency,
-        product_data : {
-          name: item.name
-        },
-        unit_amount: item.price * 100
+        currency,
+        product_data: { name: item.name },
+        unit_amount: Math.round(Number(item.price) * 100),
       },
-      quantity: item.quantity
-    }))
-
+      quantity: item.quantity,
+    }));
 
     line_items.push({
-       price_data: {
-        currency: currency,
-        product_data : {
-          name:" Delivery Charges"
-        },
-        unit_amount: deliveryCharge  * 100
+      price_data: {
+        currency,
+        product_data: { name: "Delivery Charges" },
+        unit_amount: deliveryCharge * 100,
       },
-      quantity: 1
+      quantity: 1,
+    });
 
-    })
+    // HashRouter needs '#/verify' otherwise redirect lands on root
+    const successUrl = `${frontendUrl}/#/verify?success=true&orderId=${newOrder._id}`;
+    const cancelUrl = `${frontendUrl}/#/verify?success=false&orderId=${newOrder._id}`;
 
     const session = await stripe.checkout.sessions.create({
-       success_url: `${origin}/verify?success=true&orderId=${newOrder._id}`,
-       cancel_url:  `${origin}/verify?success=false&orderId=${newOrder._id}`,
-       line_items,
-       mode: 'payment',
-    })
+      success_url: successUrl,
+      cancel_url: cancelUrl,
+      line_items,
+      mode: 'payment',
+    });
 
-    res.json({success:true, session_url: session.url});
-
+    res.json({ success: true, session_url: session.url });
   }
-  catch(error){
-    console.log('Stripe Error:', error)
-    res.json({success:false, message: error.message || 'Stripe payment failed'})
+  catch (error) {
+    console.log('Stripe Error:', error);
+    res.json({ success: false, message: error.message || 'Stripe payment failed' });
   }
 };
 
