@@ -14,14 +14,20 @@ const Verify = () => {
   const verifyPayment = async () => {
     try {
       if (!token) {
+        console.log("❌ No token found, cannot verify payment");
         return null;
       }
+
+      console.log("🔵 Verifying Stripe payment:", { success, orderId });
+      console.log("📡 Backend URL:", backendUrl);
 
       const response = await axios.post(
         backendUrl + '/api/order/verifyStripe',
         { success, orderId },
         { headers: { Authorization: `Bearer ${token}` } }
       );
+
+      console.log("✅ Verify response:", response.data);
 
       if (response.data.success) {
         setCartItems({});
@@ -32,7 +38,7 @@ const Verify = () => {
         toast.error('Payment failed!');
       }
     } catch (error) {
-      console.log(error);
+      console.log("❌ Verify payment error:", error.response?.data || error.message);
       toast.error(error.message);
     }
   };

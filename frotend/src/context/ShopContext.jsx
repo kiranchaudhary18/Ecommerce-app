@@ -10,7 +10,23 @@ const ShopContextProvider = (props) => {
 
   const currency = '$';
   const delivery_fee = 10;
-  const backendUrl = import.meta.env.VITE_BACKEND_URL;
+  
+  // Get backend URL from environment, with fallback
+  let backendUrl = import.meta.env.VITE_BACKEND_URL;
+  
+  // If not set or empty, use current origin as fallback (for deployed apps)
+  if (!backendUrl || backendUrl === 'http://localhost:4000') {
+    // For development, use localhost, otherwise use current domain
+    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+      backendUrl = 'http://localhost:4000';
+    } else {
+      // For production, assume backend is on same domain (but different port or path)
+      // Change this if your backend is on a different domain
+      backendUrl = window.location.origin.replace(':3000', ':4000');
+    }
+  }
+  
+  console.log('🔵 Using Backend URL:', backendUrl);
 
   const [search, setSearch] = useState('');
   const [showSearch, setShowSearch] = useState(false);

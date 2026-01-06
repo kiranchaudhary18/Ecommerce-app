@@ -63,8 +63,13 @@ const PlaceOrder = () => {
       amount: getCartAmount() + delivery_fee,
     };
 
+    console.log('📡 Backend URL:', backendUrl);
+    console.log('🛒 Order Data:', orderData);
+
     // 🔥 STRIPE PAYMENT
     if (method === "stripe") {
+      console.log('💳 Initiating Stripe payment...');
+      
       const response = await axios.post(
         backendUrl + "/api/order/stripe",
         orderData,
@@ -75,7 +80,7 @@ const PlaceOrder = () => {
         }
       );
 
-      console.log('Stripe Response:', response.data);
+      console.log('✅ Stripe Response:', response.data);
 
       if (response.data.success) {
         window.location.href = response.data.session_url;
@@ -86,6 +91,8 @@ const PlaceOrder = () => {
 
     // 🔥 COD PAYMENT
     if (method === "cod") {
+      console.log('📦 Placing COD order...');
+      
       const response = await axios.post(
         backendUrl + "/api/order/place",
         orderData,
@@ -96,7 +103,7 @@ const PlaceOrder = () => {
         }
       );
 
-      console.log('COD Response:', response.data);
+      console.log('✅ COD Response:', response.data);
 
       if (response.data.success) {
         setCartItems({});
@@ -108,8 +115,13 @@ const PlaceOrder = () => {
     }
 
   } catch (error) {
-    console.log('Order error:', error);
-    toast.error(error.message);
+    console.log('❌ Order error:', error.response?.data || error.message);
+    if (error.response?.status === 401) {
+      console.log('⚠️  Authentication failed - please login again');
+      toast.error('Session expired, please login again');
+    } else {
+      toast.error(error.message || 'Order placement failed');
+    }
   }
 };
 

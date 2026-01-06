@@ -13,7 +13,12 @@ const Orders = () => {
 
    const loadOrderData = async () => {
   try {
-    if (!token) return;
+    if (!token) {
+      console.log("❌ No token found, cannot load orders");
+      return;
+    }
+
+    console.log("📡 Loading orders from:", backendUrl + "/api/order/userorders");
 
     const response = await axios.post(
       backendUrl + "/api/order/userorders",
@@ -26,7 +31,7 @@ const Orders = () => {
       }
     );
 
-    console.log("ORDERS RESPONSE:", response.data); // 🔥 DEBUG
+    console.log("✅ ORDERS RESPONSE:", response.data);
 
     if (response.data.success) {
       let allOrdersItem = [];
@@ -44,9 +49,15 @@ const Orders = () => {
       });
 
       setorderData(allOrdersItem.reverse());
+      console.log("✅ Orders loaded successfully:", allOrdersItem.length, "items");
+    } else {
+      console.log("❌ Orders response not successful:", response.data.message);
     }
   } catch (error) {
-    console.log("ORDER LOAD ERROR:", error);
+    console.log("❌ ORDER LOAD ERROR:", error.response?.data || error.message);
+    if (error.response?.status === 401) {
+      console.log("⚠️  Authentication failed - token may be invalid");
+    }
   }
 };
 
