@@ -10,7 +10,8 @@ const ShopContextProvider = (props) => {
 
   const currency = '$';
   const delivery_fee = 10;
-  const backendUrl = import.meta.env.VITE_BACKEND_URL;
+  // fallback keeps app working on hosted builds even if env is missing
+  const backendUrl = import.meta.env.VITE_BACKEND_URL || 'https://ecommerce-app-axjc.onrender.com';
 
   const [search, setSearch] = useState('');
   const [showSearch, setShowSearch] = useState(false);
