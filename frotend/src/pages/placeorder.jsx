@@ -41,12 +41,6 @@ const PlaceOrder = () => {
  const onSubmitHandler = async (event) => {
   event.preventDefault();
 
-  if (!token) {
-    toast.error('Please login to place an order');
-    navigate('/login');
-    return;
-  }
-
   try {
     let orderItems = [];
 
@@ -63,11 +57,6 @@ const PlaceOrder = () => {
       }
     }
 
-    if (!orderItems.length) {
-      toast.error('Cart is empty');
-      return;
-    }
-
     const orderData = {
       address: formData,
       items: orderItems,
@@ -76,27 +65,22 @@ const PlaceOrder = () => {
 
     // 🔥 STRIPE PAYMENT
     if (method === "stripe") {
-      try {
-        const response = await axios.post(
-          backendUrl + "/api/order/stripe",
-          orderData,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-
-        console.log('Stripe Response:', response.data);
-
-        if (response.data.success && response.data.session_url) {
-          window.location.href = response.data.session_url;
-        } else {
-          toast.error(response.data.message || 'Stripe payment failed');
+      const response = await axios.post(
+        backendUrl + "/api/order/stripe",
+        orderData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
-      } catch (err) {
-        console.log('Stripe error:', err);
-        toast.error(err.response?.data?.message || err.message);
+      );
+
+      console.log('Stripe Response:', response.data);
+
+      if (response.data.success) {
+        window.location.href = response.data.session_url;
+      } else {
+        toast.error(response.data.message || 'Stripe payment failed');
       }
     }
 

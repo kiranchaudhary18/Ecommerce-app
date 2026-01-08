@@ -44,7 +44,7 @@ const Product = () => {
                            </div>
 
                           <div className="w-full sm:w-[80%]">
-  <div className="w-full h-[600px] bg-gray-100 rounded-md overflow-hidden flex items-center justify-center">
+  <div className="w-full aspect-square sm:h-[600px] bg-gray-100 rounded-md overflow-hidden flex items-center justify-center">
     <img
       src={image}
       alt=""
