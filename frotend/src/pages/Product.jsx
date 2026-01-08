@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { ShopContext } from '../context/ShopContext';
 import assets from '../assets/assets';
 import RelatedProducts from '../components/RelatedProducts';
@@ -8,6 +8,7 @@ import RelatedProducts from '../components/RelatedProducts';
 const Product = () => {
   
     const {productId} = useParams();
+  const navigate = useNavigate();
     const {products, currency, addToCart} = useContext(ShopContext);
     const [productData, setProductData] = useState(false);
     const [image, setImage] = useState ('');
@@ -30,7 +31,14 @@ const Product = () => {
     },[productId, products]);
 
     return productData ? (
-        <div className='border-t-2 pt-5 sm:pt-10 transition-opacity ease-in duration-500 opacity-100'>
+    <div className='border-t-2 pt-5 sm:pt-10 transition-opacity ease-in duration-500 opacity-100'>
+      <button
+        onClick={() => navigate(-1)}
+        className='mb-4 inline-flex items-center gap-2 rounded-full border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm transition hover:-translate-y-[1px] hover:border-gray-400 hover:shadow-md active:translate-y-0'
+      >
+        <span className='text-lg leading-none'>←</span>
+        <span>Back</span>
+      </button>
             {/* Product  Data */}
              <div className='flex gap-6 sm:gap-12 flex-col sm:flex-row px-3 sm:px-0'>
                     {/* Product Images */}
