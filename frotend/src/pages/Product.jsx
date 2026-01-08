@@ -34,9 +34,11 @@ const Product = () => {
     <div className='border-t-2 pt-5 sm:pt-10 transition-opacity ease-in duration-500 opacity-100'>
       <button
         onClick={() => navigate(-1)}
-        className='mb-4 inline-flex items-center gap-2 rounded-full border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm transition hover:-translate-y-[1px] hover:border-gray-400 hover:shadow-md active:translate-y-0'
+        className='mb-6 inline-flex items-center gap-2 px-5 py-2.5 bg-gray-900 text-white text-sm font-medium rounded-md hover:bg-gray-800 active:bg-gray-950 transition-colors duration-200 shadow-sm hover:shadow-md'
       >
-        <span className='text-lg leading-none'>←</span>
+        <svg className='w-4 h-4' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+          <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M10 19l-7-7m0 0l7-7m-7 7h18' />
+        </svg>
         <span>Back</span>
       </button>
             {/* Product  Data */}
