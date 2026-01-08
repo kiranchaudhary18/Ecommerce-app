@@ -51,6 +51,12 @@ const Navbar = () => {
 
             </ul>
 
+            {/* Admin Panel Link */}
+            <a href="https://forever-admin-daww.onrender.com/" target="_blank" rel="noopener noreferrer" className="hidden sm:flex items-center gap-2 bg-slate-800 hover:bg-slate-900 text-white px-4 py-2 rounded-lg text-xs font-bold transition-all duration-300 shadow-md hover:shadow-xl border border-slate-700 hover:border-slate-600">
+               <span className="text-base">⚙️</span>
+               <span>ADMIN</span>
+            </a>
+
          <div className="flex items-center gap-6">
             <img onClick={() => setShowSearch(true)} src={assets.search} className='w-5 cursor-pointer' alt=" "/>
             
@@ -95,6 +101,10 @@ const Navbar = () => {
                       <NavLink onClick={()=>setVisible(false)} className='py-2 pl-6 border' to="/collection">COLLECTION</NavLink>
                       <NavLink onClick={()=>setVisible(false)} className='py-2 pl-6 border' to="/about">ABOUT</NavLink>
                       <NavLink onClick={()=>setVisible(false)} className='py-2 pl-6 border' to="/contact">CONTACT</NavLink>
+                      <a href="https://forever-admin-daww.onrender.com/" target="_blank" rel="noopener noreferrer" onClick={()=>setVisible(false)} className='py-2 pl-6 border bg-slate-800 text-white font-bold flex items-center gap-2 hover:bg-slate-900 transition-all'>
+                           <span className="text-base">⚙️</span>
+                           <span>ADMIN PANEL</span>
+                      </a>
               </div>
          </div>
 
